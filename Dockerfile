@@ -1,4 +1,5 @@
-FROM node:18
+# Create temporary build image
+FROM node:18-alpine
 
 # Create app directory
 WORKDIR /usr
@@ -9,13 +10,20 @@ WORKDIR /usr
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Remove unneeded development dependencies
-RUN npm prune --production
-
-# RUN npm install
-# If you are building your code for production
-RUN npm ci --omit=dev
-
 # Bundle app source
 COPY ./src src
-CMD [ "node", "index.js"]
+RUN ls -a
+
+# Install and build
+RUN npm install
+RUN npm run tsc
+
+# Create production image
+FROM node:18-alpine
+WORKDIR /usr
+COPY package*.json ./
+RUN npm install --only=production
+COPY --from=0 /user/dist .
+RUN npm install pm2 -g
+
+CMD [ "pm2-runtime", "index.js"]
