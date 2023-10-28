@@ -1,5 +1,6 @@
 import * as readline from "readline";
 import * as fs from 'fs';
+import { exec } from "child_process";
 
 export class ActivityMonitor {
     private _name: string;
@@ -20,7 +21,7 @@ export class ActivityMonitor {
     }
 
     public start() {
-        console.log(this._name, 'start monitoring');
+        console.log(this._name, '->', 'start monitoring');
         this._timer = setInterval(() => {
 
             const readInterface = readline.createInterface({
@@ -36,28 +37,26 @@ export class ActivityMonitor {
                     let read: number = parseInt(match.groups?.read || '0');
                     let written: number = parseInt(match.groups?.written || '0');
                     if ((read > this._read) || (written > this._written)) {
-                        console.log(this._name, 'active');
+                        console.log(this._name, '->', 'active');
                         this._lastActivity = Date.now();
                         this._standby = false;
                     } else {
                         let minutesIdle = Math.round((Date.now() - this._lastActivity) / 600) / 100;
-                        console.log(this._name, 'idle', minutesIdle, 'minutes', this._standby ? 'standby' : 'spinning');
+                        console.log(this._name, '->', 'idle', minutesIdle, 'minutes', this._standby ? 'standby' : 'spinning');
                         if (minutesIdle >= this._standbyAfterMinutes && !this._standby) {
-                            console.log(this._name, 'spinning down');
-                            //exec('hdparm -y ' + this._device, (err, stdout, stderr) => {
-                            //    console.log('stdout: ' + stdout);
-                            //    console.log('stderr: ' + stderr);
+                            console.log(this._name, '->', 'spinning down');
+                            exec('hdparm -y ' + this._device, (err, stdout, stderr) => {
+                                console.log(this._name, '->', 'stdout:', stdout);
+                                console.log(this._name, '->', 'stderr:', stderr);
 
-                            //    if (err !== null) {
-                            //        console.log('exec error: ' + error);
-                            //    }
-                            //});
+                                this._standby = (err == null);
 
-                            this._standby = true;
+                                if (err !== null) {
+                                    console.log(this._name, '->', 'exec error:', err);
+                                }
+                            });                            
                         }
-
                     }
-
                     this._read = read;
                     this._written = written;
                     // console.log(match.groups.name, match.groups.read, match.groups.written);
@@ -68,7 +67,7 @@ export class ActivityMonitor {
 
     stop() {
         if (this._timer != null) {
-            console.log(this._name, 'stop monitoring');
+            console.log(this._name, '->', 'stop monitoring');
             clearTimeout(this._timer);
         }
     }

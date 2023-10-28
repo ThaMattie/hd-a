@@ -25,5 +25,6 @@ COPY package*.json ./
 RUN npm install --omit=dev
 COPY --from=0 /usr/dist .
 RUN npm install pm2 -g
+RUN apk update && apk add hdparm
 
 CMD [ "pm2-runtime", "index.js"]
