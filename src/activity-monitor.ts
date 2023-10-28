@@ -24,7 +24,7 @@ export class ActivityMonitor {
         this._timer = setInterval(() => {
 
             const readInterface = readline.createInterface({
-                input: fs.createReadStream('.\\tests\\diskstats')
+                input: fs.createReadStream('/proc/diskstats')
             });
 
             readInterface.on('line', (line) => {
