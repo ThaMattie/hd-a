@@ -22,7 +22,7 @@ RUN npm run tsc
 FROM node:18-alpine
 WORKDIR /usr
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
 COPY --from=0 /usr/dist .
 RUN npm install pm2 -g
 
