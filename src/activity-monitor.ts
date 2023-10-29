@@ -11,7 +11,7 @@ export class ActivityMonitor {
     private _timer: any = null;
     private _read: number = 0;
     private _written: number = 0;
-    private _standby: boolean = false;
+    private _standby: boolean|null = null;
 
     private getActivity(): [number, number] {
         let read = 0;
@@ -41,7 +41,7 @@ export class ActivityMonitor {
         let [read, written] = this.getActivity();
         this._read = read;
         this._written = written;
-
+        
         this._timer = setInterval(() => {
             let [read, written] = this.getActivity();
             if ((read > this._read) || (written > this._written)) {
@@ -50,7 +50,7 @@ export class ActivityMonitor {
                 this._standby = false;
             } else {
                 let minutesIdle = Math.round((Date.now() - this._lastActivity) / 600) / 100;
-                console.log(this._name, '->', 'idle', minutesIdle, 'minutes', this._standby ? 'standby' : 'spinning');
+                console.log(this._name, '->', 'idle', minutesIdle, 'minutes', this._standby == null ? '[unknown]': this._standby ? 'standby' : 'spinning');
                 if (minutesIdle >= this._standbyAfterMinutes && !this._standby) {
                     console.log(this._name, '->', 'spinning down');
                     exec('hdparm -y ' + this._device, (err, stdout, stderr) => {
