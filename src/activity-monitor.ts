@@ -23,8 +23,10 @@ export class ActivityMonitor {
             if (match && this._device.endsWith(match.groups?.name || '')) {
                 read = parseInt(match.groups?.read || '0');
                 written = parseInt(match.groups?.written || '0');
+                console.log('match', read, written, this._read, this._written);
             }
         });
+        console.log('activity', read, written, this._read, this._written);
         return [read, written];
     }
 
