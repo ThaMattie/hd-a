@@ -21,7 +21,7 @@ export class ActivityMonitor {
     }
 
     public start() {
-        console.log(this._name, '->', 'start monitoring');
+        console.log(this._name, '->', 'start monitoring', this._standbyAfterMinutes, this._checkInterval);
         this._timer = setInterval(() => {
 
             const readInterface = readline.createInterface({
