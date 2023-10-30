@@ -3,7 +3,7 @@
 Tool that monitors the hard disk activity via /proc/diskstats  
 Puts disk into standby mode with hdparm after the defined minutes of inactivity
 
-Created for hard disks attached to single board computer in usb enclosure that has not power management
+Created for hard disks attached to single board computer in usb enclosure that has no power management
 
 ## Installation
 
