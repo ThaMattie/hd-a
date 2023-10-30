@@ -30,12 +30,12 @@ services:
 Devices are defined through the 'devices' environment variable  
 Cannot contain spaces outside of the quotes  
 This is a json with the folowing fields:
-| Field | Type | Optional | Description | Example |
-| --- | --- | --- | --- | --- |
-| name | string | no | the device name for logging | Data |
-| device | string | no | the device path | /dev/sda |
-| standbyAfterMinutes | number | yes | minutes of inactivity before issuing standby command | 10 |
-| checkInterval | number | yes | interval (ms) for activity check | 60000 |
+| Field | Type | Optional | Default | Description | Example |
+| --- | --- | --- | --- | --- | --- |
+| name | string | no | | the device name for logging | Data |
+| device | string | no | | the device path | /dev/sda |
+| standbyAfterMinutes | number | yes | 15 | minutes of inactivity before issuing standby command | 10 |
+| checkInterval | number | yes | 30000 | interval (ms) for activity check | 60000 |
 
 ### Examples
 
