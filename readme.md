@@ -8,7 +8,7 @@ Created for hard disks attached to single board computer in usb enclosure that h
 ## Installation
 
 Build image with docker  
-Must run in priviledged mode for hdparm
+Must run in privileged mode for hdparm
 
 ### Docker compose
 
